@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.com">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"/>
+
+<!--  js jquery link -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css"/>
+	
+<!-- ajax link -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	
+<title>Home Page</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<!-- modal -->
+<script type="text/javascript">
+ $(document).ready(function(){
+	 $('#addModal').modal('show');
+	 $('#editModal').modal('show');
+ });</script>
+ 
+</head>
+<body>
+
+<!-- Navbar -->
+
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary text-black">
+		<a class="navbar-brand" href="#"> <strong><u>EMPLOYEE
+					SYSTEM</u></strong>
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active"><a class="nav-link" href="#"> <strong>Home</strong>
+						<span class="sr-only">(current)</span></a></li>
+				<li class="nav-item active"><a class="nav-link"
+					href="add_employee"  data-toggle="modal" data-target="#addModal"> <strong>Add Employee </strong></a></li>
+
+			</ul>
+
+		</div>
+	</nav>
+<!-- Navbar -->
+	
+	
+	<div th:if=${session.msg} class="container p-2">
+		<div class="alert alert-success" role="alert" th:text="${session.msg}">
+		</div>
+		<th:block th:text="${#session.removeAttribute('msg')}"></th:block>
+	</div>
+
+       <div class="container p-5">
+		<table id="datatable" class="table table-striped">
+			<thead class="bg-primary text-black">
+				<tr>
+					<th scope="col"><strong>Id</strong></th>
+					<th scope="col"><strong>Name</strong></th>
+					<th scope="col"><strong>Address</strong></th>
+					<th scope="col"><strong>Email</strong></th>
+					<th scope="col"><strong>PhoneNo</strong></th>
+					<th scope="col"><strong>Salary</strong></th>
+					<th scope="col"><strong>Action</strong></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each=" e: ${employee}">
+					<th th:text="${e.id}"></th>
+					<td th:text="${e.name}"></td>
+					<td th:text="${e.address}"></td>
+					<td th:text="${e.email}"></td>
+					<td th:text="${e.phno}"></td>
+					<td th:text="${e.salary}"></td>
+					<td><a class="btn btn-sm btn-primary"
+						th:href="@{/edit/{id}(id=${e.id})}"  data-toggle="modal" data-target="#editModal">Edit</a> <a
+						class="btn btn-sm btn-danger"
+						th:href="@{/delete/{id}(id=${e.id})}" >Delete</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div> 
+	
+<!-- add_employee Bootstrap varying content -->
+
+	<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Add Employee</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <form action="/add_employee" method="GET">
+        
+          <div class="form-group">
+            <label for="name" class="col-form-label">Enter Full Name</label>
+            <input placeholder="Enter Full Name" type="text" class="form-control" id="name1">
+          </div>
+          
+           <div class="form-group">
+            <label for="address" class="col-form-label">Enter Address</label>
+            <input placeholder="Enter Address" type="text" class="form-control" id="address1">
+          </div>
+          
+           <div class="form-group">
+            <label for="email" class="col-form-label">Enter Email</label>
+            <input placeholder="Enter Email" type="text" class="form-control" id="email1">
+          </div>
+          
+           <div class="form-group">
+            <label for="phno" class="col-form-label">Enter Phone No</label>
+            <input placeholder="Enter Phone No" type="text" class="form-control" id="phno1">
+          </div>
+          
+           <div class="form-group">
+            <label for="salary" class="col-form-label">Enter Salary</label>
+            <input placeholder="Enter Salary" type="text" class="form-control" id="salary1">
+          </div>   
+                 
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">CLOSE</button>
+        <button type="button" class="btn btn-primary" onclick="addEmployee();"><strong> SUBMIT</strong> </button>
+      </div>
+    </div>
+   </div>
+ </div>
+ 
+<!-- add_employee varying content -->
+	
+	
+	
+<!-- edit Bootstrap varying content -->
+    
+	<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit Employee</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+     <div class="modal-body">
+      <form action="/editemployee" method="GET">
+          <div class="form-group">
+            <label for="name" class="col-form-label">Enter Full Name</label>
+            <input placeholder="Enter Full Name" type="text" class="form-control" th:id="name">
+          </div>
+          
+           <div class="form-group">
+            <label for="address" class="col-form-label">Enter Address</label>
+            <input placeholder="Enter Address" type="text" class="form-control" id="address">
+          </div>
+          
+           <div class="form-group">
+            <label for="email" class="col-form-label">Enter Email</label>
+            <input placeholder="Enter Email" type="text" class="form-control" id="email">
+          </div>
+          
+           <div class="form-group">
+            <label for="phno" class="col-form-label">Enter Phone No</label>
+            <input placeholder="Enter Phone No" type="text" class="form-control" id="phno">
+          </div>
+          
+           <div class="form-group">
+            <label for="salary" class="col-form-label">Enter Salary</label>
+            <input placeholder="Enter Salary" type="text" class="form-control" id="salary">
+          </div>
+                    
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">CLOSE</button>
+        <button type="button" class="btn btn-primary"  onclick="editEmployee();"> <strong>SUBMIT</strong> </button>
+      </div>
+    </div>
+   </div>
+ </div>
+<!-- edit varying content -->
+	 	
+	
+<script type="text/javascript">
+	
+	 $function addEmployee() {
+		
+		var name=document.getElementById('name1').value;
+		alert(name);
+		
+		var address=document.getElementById('address1').value;
+		alert(address);
+		
+		var email=document.getElementById('email1').value;
+		alert(email);
+		
+		var phno=document.getElementById('phno1').value;
+		alert(phno);
+		
+		var salary=document.getElementById('salary1').value;
+		alert(salary);
+		
+		
+      $.ajax({
+		
+		type: 'ajax',
+		method: 'GET',
+		url: "/add_employee",
+		data: {name:name,address:address,email:email,phno:phno,salary:salary},
+		
+		async: false,
+		dataType: 'json',
+		success: function (data) {
+		},
+		error: function () {
+		alert('Could not Save Data');
+		}
+		});
+	}
+		
+		$function editEmployee() {
+
+			$.ajax({
+			type: 'ajax',
+			method: 'GET',
+			url: "/edit/{id}",
+			data: {id: id},
+			data: {name: name,},
+			data: {name: name,},
+			data: {name: address,},
+			data: {name: email,},
+			data: {name: phno,},
+			data: {name: salary,},
+			async: false,
+			dataType: 'json',
+			success: function (data) {
+
+			},
+			error: function () {
+			alert('Could not Edit Data');
+			}
+			});
+		}
+		
+	/* $("form").submit(fuction(e){
+		e.preventDefault();
+		var Name=$("input[name='name']").val();
+		var Address=$("input[address='address']").val();
+		var Email=$("input[email='email']").val();
+		var PhoneNo=$("input[phno='phno']").val();
+		var Salary=$("input[salary='salary']").val();
+		
+		$(".data-table tbody").append("<tr data-name='"+name+"' data-address='"+address+"' data-email='"+email+"' data-phno='"+phno+"' data-salary='"+salary+"'> 
+		<td>"+name+"</td> <td>"+address+"</td> <td>"+email+"</td> <td>"+phno+"</td> <td>"+salary+"</td>");
+		
+		$("input[name='']").val("");
+	});
+	
+	 $("document").ready(function(){
+		  var table=$('#datatable').DataTable(){
+			  
+			  table.on('click','edit',function(){
+				 $tr=$(this).closest('tr');
+				 if($($tr).hasClass('child')){
+					 $tr=$tr.prev('.parent');
+				 }
+				 var data=table.row($tr).data();
+				 console.log(data);
+				 
+				 $('#name').val(data[1]);
+				 $('#address').val(data[2]);
+				 $('#email').val(data[3]);
+				 $('#phno').val(data[4]);
+				 $('#salary').val(data[5]);
+				 
+				 $('editform').attr('action','/addemployee',+data[0]);
+				 $('editModal').modal('show');
+			  });
+	 }); */
+</script>
+
+	
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+</body>
+</html>
